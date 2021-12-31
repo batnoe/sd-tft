@@ -2,26 +2,27 @@
  
 essai de fonctionnement d'une carte sd sur un écran tft 3.5 9486
 
-#include "FS.h"
-#include "SD.h"
+#define TFT_PARALLEL_8_BIT
 
-if(!SD.begin(5)){
-    Serial.println("Card Mount Failed");
-    return;
-  }
-  uint8_t cardType = SD.cardType();
+#define ESP32 PARALLEL
 
-  if(cardType == CARD_NONE){
-    Serial.println("No SD card attached");
-    return;
-  }
-  Serial.print("SD Card Type: ");
-  if(cardType == CARD_MMC){
-    Serial.println("MMC");
-  } else if(cardType == CARD_SD){
-    Serial.println("SDSC");
-  } else if(cardType == CARD_SDHC){
-    Serial.println("SDHC");
-  } else {
-    Serial.println("UNKNOWN");
-  }
+// The ESP32 and TFT the pins used for testing are:
+#define TFT_CS 33 // Chip select control pin (library pulls permanently low
+#define TFT_DC 15 // Data Command control pin - must use a pin in the range 0-31
+#define TFT_RST 32 // Reset pin, toggles on startup
+#define TFT_WR 4 // Write strobe control pin - must use a pin in the range 0-31
+#define TFT_RD 2 // Read strobe control pin
+#define TFT_DO 12 // Must use pins in the range 0-31 for the data bus
+#define TFT_D1 13 // so a single register write sets/clears all bits.
+#define TFT_D2 26 // Pins can be randomly assigned, this does not affect
+#define TFT_D3 25 // TFT screen update performance.
+#define TFT_D4 17
+#define TFT_D5 16
+#define TFT_D6 27
+#define TFT D7 14
+
+--------------- SD card -------------------
+SD SS  D5 CS
+SD DI D23 MOSI
+SD DO D19 MISO
+SD SCK  D18 CLK
