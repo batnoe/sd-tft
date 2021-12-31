@@ -101,7 +101,7 @@ void setup()                         // ----- Début du setup ----------------
 }                                   // ---------------- Fin du setup ------------------
 
 void loop()                        // --------------- Début de la loop ---------
-{     char message[10];  
+{     char message[10];            // -- message pour sd ------
   if ( (millis() - temps) > 1000*60) {
    float temp(NAN), hum(NAN), pres(NAN);
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
@@ -124,15 +124,12 @@ void loop()                        // --------------- Début de la loop --------
   
   printLocalTime();
 
-  int mesure = analogRead(36);  //----------------------------------------
-
+  float mesure = temp;  //---------- début sd -------------------------
     // conversion de la valeur numérique en chaîne de caractères
-    sprintf(message,"%d \n", mesure);
-
-    Serial.print("Valeur mesurée: ");
+    sprintf(message,"%.1f \n", mesure);
+    Serial.print("Temperature: ");
     Serial.print(message);
-
-    appendFile(SD, "/Valeurs.txt", message);  //--------------------------------------
+    appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
 
   temps = millis() ;}       //  delay (1000*60);
 }                               
