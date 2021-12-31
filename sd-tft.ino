@@ -35,26 +35,10 @@ TFT_eSPI myGLCD = TFT_eSPI();       // Invoke custom library
 void setup()                         // ----- Début du setup ----------------
 { 
   Serial.begin(115200);
-  if(!SD.begin(5)){
-    Serial.println("Card Mount Failed");
+  if (!SD.begin(5)) {
+    Serial.println("Carte SD introuvable");
     return;
-  }
-  uint8_t cardType = SD.cardType();
-
-  if(cardType == CARD_NONE){
-    Serial.println("No SD card attached");
-    return;
-  }
-  Serial.print("SD Card Type: ");
-  if(cardType == CARD_MMC){
-    Serial.println("MMC");
-  } else if(cardType == CARD_SD){
-    Serial.println("SDSC");
-  } else if(cardType == CARD_SDHC){
-    Serial.println("SDHC");
-  } else {
-    Serial.println("UNKNOWN");
-  }
+  }else{Serial.println("Carte SD détectée");}
 
   Serial.printf("Connecting to %s ", ssid);
   WiFi.begin(ssid, password);
@@ -117,7 +101,7 @@ void setup()                         // ----- Début du setup ----------------
 }                                   // ---------------- Fin du setup ------------------
 
 void loop()                        // --------------- Début de la loop ---------
-{      
+{     char message[10];  
   if ( (millis() - temps) > 1000*60) {
    float temp(NAN), hum(NAN), pres(NAN);
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
@@ -139,6 +123,17 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
   
   printLocalTime();
+
+  int mesure = analogRead(36);  //----------------------------------------
+
+    // conversion de la valeur numérique en chaîne de caractères
+    sprintf(message,"%d \n", mesure);
+
+    Serial.print("Valeur mesurée: ");
+    Serial.print(message);
+
+    appendFile(SD, "/Valeurs.txt", message);  //--------------------------------------
+
   temps = millis() ;}       //  delay (1000*60);
 }                               
 // --------------- Fin de la loop -----------------
@@ -173,4 +168,20 @@ void printLocalTime()
   //Optional: Construct String object 
   String asString(timeStringBuff);
   myGLCD.drawString(asString, 15, 15, 6);
+}
+
+void appendFile(fs::FS &fs, const char * path, const char * message) {
+  Serial.printf("Ecriture dans le fichier: %s\n", path);
+
+  File file = fs.open(path, FILE_APPEND);
+  if (!file) {
+    Serial.println("Echec d'ouverture du fichier");
+    return;
+  }
+  if (file.print(message)) {
+    Serial.println("Fichier modifié avec succes.");
+  } else {
+    Serial.println("Echec de la modification du fichier.");
+  }
+  file.close();
 }
