@@ -1,9 +1,10 @@
-# -------------------- sd-tft ----------------------------
+# -------------------- SD-TFT ----------------------------
  
-essai de fonctionnement d'une carte sd sur un écran tft 3.5 9486
+Essai de fonctionnement d'une carte sd sur un écran tft 3.5 9486
 
-// Pour ESP32 Epesy Wroom et TFT 3.5 ILI9486
-// Test avec carte sd
+
+// Pour ESP32 DEVKIT Wroom et TFT 3.5 ILI9486
+// Test avec carte sd et sonde bme280
 
 #define ESP32_PARALLEL
 
