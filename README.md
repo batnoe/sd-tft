@@ -1,9 +1,10 @@
 # -------------------- SD-TFT ----------------------------
  
-Essai de fonctionnement d'une carte sd sur un écran tft 3.5 9486
+Essai de fonctionnement d'une carte sd sur un écran tft 3.5 (9486)
 
-Enregistrement de la température extérieur toutes les 10 minutes sur la carte sd
+Enregistrement de la température extérieur toutes les 5 minutes sur la carte sd
 
+                  DATE        HEURE       TEMPERATURE
 
 // Pour ESP32 DEVKIT Wroom et TFT 3.5 ILI9486
 
