@@ -1,5 +1,7 @@
-// station météo upesy tft 3.5 bme280 carte sd
+// station météo (esp32 upesy écran tft 3.5 sonde bme280 lecteur de carte sd)
 // bernard.picasa14@gmail.com
+// 01/01/2021
+// librairie TFT_eSPI
 
 #include <esp_now.h>
 #include <WiFi.h>

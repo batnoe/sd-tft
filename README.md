@@ -1,4 +1,6 @@
 # -------------------- SD-TFT ----------------------------
+
+                  librairie TFT_eSPI
  
 Essai de fonctionnement d'une carte sd sur un écran tft 3.5 (9486)
 
@@ -6,9 +8,13 @@ Enregistrement de la température extérieur toutes les 5 minutes sur la carte s
 
                   DATE        HEURE       TEMPERATURE
 
+
+
 // Pour ESP32 DEVKIT Wroom et TFT 3.5 ILI9486
 
 // Test avec carte sd et sonde bme280
+
+>> --   Configuration du fichier  -->    User_Setup.h 
 
 #define ESP32_PARALLEL
 
@@ -53,7 +59,7 @@ Enregistrement de la température extérieur toutes les 5 minutes sur la carte s
 
 #define SMOOTH_FONT
 
---------------- SD card -------------------
+--------------- Connection SD card -------------------
 
 SD SS  D5 CS
 
