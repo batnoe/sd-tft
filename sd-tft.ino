@@ -18,7 +18,8 @@ const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
 float humidite;
-long temps;
+unsigned long temps;
+unsigned long temps_sd;
 
 typedef struct struct_message {
     float c;
@@ -101,7 +102,7 @@ void setup()                         // ----- Début du setup ----------------
 }                                   // ---------------- Fin du setup ------------------
 
 void loop()                        // --------------- Début de la loop ---------
-{     char message[10];            // -- message pour sd ------
+{     
   if ( (millis() - temps) > 1000*60) {
    float temp(NAN), hum(NAN), pres(NAN);
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
@@ -122,15 +123,7 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawNumber(pres/100+18, 200, 170, 6);
   myGLCD.drawNumber(hum + 4, 250, 250, 6);
   
-  printLocalTime();
-
-  float mesure = temp;  //---------- début sd -------------------------
-    // conversion de la valeur numérique en chaîne de caractères
-    sprintf(message,"%.1f \n", mesure);
-    Serial.print("Temperature: ");
-    Serial.print(message);
-    appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
-
+  printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
 }                               
 // --------------- Fin de la loop -----------------
@@ -147,7 +140,19 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
 
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
   myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
+  
+  if ( (millis() - temps_sd) > 1000*60) {                            //---------- début sd -------------------------
+  float mesure = temp_ext;  
+  char message[10];                                               // -- message pour sd ------
+    // conversion de la valeur numérique en chaîne de caractères
+    sprintf(message,"%.1f \n", mesure);
+    Serial.print("Temperature: ");
+    Serial.print(message);
+    appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
+    temps_sd = millis() ;
+    }
 }
+
 void printLocalTime()
 {
   time_t rawtime;
