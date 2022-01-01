@@ -170,7 +170,7 @@ void printLocalTime()
 }
 
 void appendFile(fs::FS &fs, const char * path, const char * message) {
-  Serial.printf("Ecriture dans le fichier: %s\n", path);
+  //Serial.printf("Ecriture dans le fichier: %s\n", path);
 
   File file = fs.open(path, FILE_APPEND);
   if (!file) {
