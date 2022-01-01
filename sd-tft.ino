@@ -1,4 +1,6 @@
-// station météo upesy tft 3.5 bme280
+// station météo upesy tft 3.5 bme280 carte sd
+// bernard.picasa14@gmail.com
+
 #include <esp_now.h>
 #include <WiFi.h>
 #include "SPI.h"
