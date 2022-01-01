@@ -53,6 +53,7 @@ Enregistrement de la température extérieur toutes les 10 minutes sur la carte 
 #define SMOOTH_FONT
 
 --------------- SD card -------------------
+
 SD SS  D5 CS
 
 SD DI D23 MOSI

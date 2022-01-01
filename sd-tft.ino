@@ -140,13 +140,26 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
   myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
   
-  if ( (millis() - temps_sd) > 1000*600) {                            //---------- début sd -------------------------
-  float mesure = temp_ext;  
+  if ( (millis() - temps_sd) > 1000*300) {                        //--5 minutes début sd -------------------------
+  //float mesure = temp_ext;  
   char message[10];                                               // -- message pour sd ------
     // conversion de la valeur numérique en chaîne de caractères
-    sprintf(message,"%.1f \n", mesure);
+    sprintf(message,"%.1f° \n", temp_ext);
     Serial.print("Temperature: ");
     Serial.print(message);
+
+    time_t rawtime;
+    struct tm timeinfo;
+    if(!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+   return;
+  }
+    char timeStringBuff[50]; //50 chars should be enough
+    strftime(timeStringBuff, sizeof(timeStringBuff), "%A %d %B %Y  -  %H:%M", &timeinfo);
+    appendFile(SD, "/Valeurs.txt", timeStringBuff);
+    appendFile(SD, "/Valeurs.txt", ":     ");
+
     appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
     temps_sd = millis() ;
     }
