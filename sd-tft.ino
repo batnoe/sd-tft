@@ -142,10 +142,10 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   
   if ( (millis() - temps_sd) > 1000*300) {                        //--5 minutes début sd -------------------------
   //float mesure = temp_ext;  
-  char message[10];                                               // -- message pour sd ------
+  char message[30];                                               // -- message pour sd ------
     // conversion de la valeur numérique en chaîne de caractères
-    sprintf(message,"%.1f° \n", temp_ext);
-    Serial.print("Temperature: ");
+    sprintf(message,"   Temperature: %.1f° \n", temp_ext);
+    //Serial.print("Temperature: ");
     Serial.print(message);
 
     time_t rawtime;
@@ -156,9 +156,9 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
    return;
   }
     char timeStringBuff[50]; //50 chars should be enough
-    strftime(timeStringBuff, sizeof(timeStringBuff), "%A %d %B %Y  -  %H:%M", &timeinfo);
+    strftime(timeStringBuff, sizeof(timeStringBuff), "%A %d %B %Y   Heure: %H:%M", &timeinfo);
     appendFile(SD, "/Valeurs.txt", timeStringBuff);
-    appendFile(SD, "/Valeurs.txt", ":     ");
+    //appendFile(SD, "/Valeurs.txt", ":     ");
 
     appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
     temps_sd = millis() ;
