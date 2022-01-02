@@ -4,9 +4,9 @@
  
 Essai de fonctionnement d'une carte sd sur un écran tft 3.5 (9486)
 
-Enregistrement de la température extérieur toutes les 5 minutes sur la carte sd
+Enregistrement de la température extérieur toutes les 5 minutes sur la carte sd intégrée a l'écran TFT
 
-                  DATE        HEURE       TEMPERATURE
+Format enregistrement ---->  DATE        HEURE       TEMPERATURE
 
 
 
