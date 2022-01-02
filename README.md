@@ -22,7 +22,7 @@ Enregistrement de la température extérieur toutes les 5 minutes sur la carte s
 
 #define TFT_CS 33 // Chip select control pin (library pulls permanently low
 
-#define TFT_DC 15 // Data Command control pin - must use a pin in the range 0-31
+#define TFT_DC/RS 15 // Data Command control pin - must use a pin in the range 0-31
 
 #define TFT_RST 32 // Reset pin, toggles on startup
 
