@@ -1,6 +1,6 @@
 # -------------------- SD-TFT ----------------------------
 
-                  librairie TFT_eSPI
+                  librairie TFT_eSPI requis
  
 Essai de fonctionnement d'une carte sd sur un écran tft 3.5 (9486)
 
@@ -53,8 +53,11 @@ Enregistrement de la température extérieur toutes les 5 minutes sur la carte s
 #define LOAD_FONT4  // Font 4. Medium 26 pixel high
 
 #define LOAD_FONT6  // Font 6. Large 48 pixel
+
 #define LOAD_FONT7  // Font 7. 7 segment 48 pixel
+
 #define LOAD_FONT8  // Font 8. Large 75 pixel
+
 #define LOAD_GFXFF  // FreeFonts.
 
 #define SMOOTH_FONT
