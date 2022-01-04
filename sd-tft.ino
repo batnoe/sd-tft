@@ -1,4 +1,8 @@
-// station météo upesy tft 3.5 bme280
+// station météo (esp32 upesy écran tft 3.5 sonde bme280 lecteur de carte sd)
+// bernard.picasa14@gmail.com
+// 01/01/2021
+// librairie TFT_eSPI
+
 #include <esp_now.h>
 #include <WiFi.h>
 #include "SPI.h"
@@ -18,7 +22,8 @@ const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
 float humidite;
-long temps;
+unsigned long temps;
+unsigned long temps_sd;
 
 typedef struct struct_message {
     float c;
@@ -101,7 +106,7 @@ void setup()                         // ----- Début du setup ----------------
 }                                   // ---------------- Fin du setup ------------------
 
 void loop()                        // --------------- Début de la loop ---------
-{     char message[10];  
+{     
   if ( (millis() - temps) > 1000*60) {
    float temp(NAN), hum(NAN), pres(NAN);
    BME280::TempUnit tempUnit(BME280::TempUnit_Celsius);
@@ -119,21 +124,10 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
   myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
-  myGLCD.drawNumber(pres/100+18, 200, 170, 6);
-  myGLCD.drawNumber(hum + 4, 250, 250, 6);
+  myGLCD.drawNumber(pres/100+20, 200, 170, 6);
+  myGLCD.drawNumber(hum + 3, 250, 250, 6);
   
-  printLocalTime();
-
-  int mesure = analogRead(36);  //----------------------------------------
-
-    // conversion de la valeur numérique en chaîne de caractères
-    sprintf(message,"%d \n", mesure);
-
-    Serial.print("Valeur mesurée: ");
-    Serial.print(message);
-
-    appendFile(SD, "/Valeurs.txt", message);  //--------------------------------------
-
+  printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
 }                               
 // --------------- Fin de la loop -----------------
@@ -144,13 +138,35 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   humidite = myData.d;
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_BLUE,TFT_BLACK);
-  myGLCD.drawNumber(humidite, 160, 250, 6);
-  //if (temp_ext < 10)  { myGLCD.drawFloat(temp_ext, 1, 220, 90, 6); } else { myGLCD.drawFloat(temp_ext, 1, 210, 90, 6); }  // affiche température extérieur
-  //myGLCD.setTextColor(TFT_WHITE,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 150, 80, 5); myGLCD.drawFloat(t_min, 1, 150, 110, 5);  //affiche mini maxi
-
+  myGLCD.drawNumber(humidite-5, 160, 250, 6);
   myGLCD.setTextColor(TFT_ORANGE,TFT_BLACK); myGLCD.drawFloat(temp_ext, 1, 130, 340, 8);
   myGLCD.setTextColor(TFT_RED,TFT_BLACK); myGLCD.drawFloat(t_max, 1, 10, 330, 6); myGLCD.setTextColor(TFT_BLUE,TFT_BLACK); myGLCD.drawFloat(t_min, 1, 10, 400, 6);  //affiche mini maxi
+  
+  if ( (millis() - temps_sd) > 1000*300) {                        //--5 minutes début sd -------------------------
+  //float mesure = temp_ext;  
+  char message[30];                                               // -- message pour sd ------
+    // conversion de la valeur numérique en chaîne de caractères
+    sprintf(message,"   Temperature: %.1f° \n", temp_ext);
+    //Serial.print("Temperature: ");
+    Serial.print(message);
+
+    time_t rawtime;
+    struct tm timeinfo;
+    if(!getLocalTime(&timeinfo))
+  {
+    Serial.println("Failed to obtain time");
+   return;
+  }
+    char timeStringBuff[50]; //50 chars should be enough
+    strftime(timeStringBuff, sizeof(timeStringBuff), "%A %d %B %Y   Heure: %H:%M", &timeinfo);
+    appendFile(SD, "/Valeurs.txt", timeStringBuff);
+    //appendFile(SD, "/Valeurs.txt", ":     ");
+
+    appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
+    temps_sd = millis() ;
+    }
 }
+
 void printLocalTime()
 {
   time_t rawtime;
@@ -171,7 +187,7 @@ void printLocalTime()
 }
 
 void appendFile(fs::FS &fs, const char * path, const char * message) {
-  Serial.printf("Ecriture dans le fichier: %s\n", path);
+  //Serial.printf("Ecriture dans le fichier: %s\n", path);
 
   File file = fs.open(path, FILE_APPEND);
   if (!file) {
