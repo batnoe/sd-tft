@@ -21,8 +21,8 @@ const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float humidite; float temp_moy; unsigned short nb;
-unsigned long temps;
+float humidite; float temp_moy; int nb;
+unsigned long temps;  long temps_moy;
 unsigned long temps_sd;
 
 typedef struct struct_message {
@@ -137,9 +137,6 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   temp_ext = myData.c;
   humidite = myData.d;
 
-  // affichage de la moyenne exterieur
-  nb = ++nb;  temp_moy=temp_moy+temp_ext;  myGLCD.setTextColor(TFT_PINK,TFT_BLACK);   myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
-
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_BLUE,TFT_BLACK);
   myGLCD.drawNumber(humidite-5, 160, 250, 6);
@@ -169,6 +166,13 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
     appendFile(SD, "/Valeurs.txt", message);  //-- fin sd --------------------
     temps_sd = millis() ;
     }
+    
+    if ( (millis() - temps_moy) > 1000*60) {
+      // calcul de la moyenne température exterieur
+      nb = ++nb;  temp_moy=temp_moy+temp_ext;     
+      temps_moy = millis();
+    } //  puis affichage
+    myGLCD.setTextColor(TFT_PINK,TFT_BLACK);  myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
 }
 
 void printLocalTime()
