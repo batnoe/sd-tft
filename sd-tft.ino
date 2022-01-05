@@ -21,7 +21,7 @@ const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float humidite; float temp_moy; int nb;
+float humidite; float temp_moy; unsigned short nb;
 unsigned long temps;
 unsigned long temps_sd;
 
@@ -136,6 +136,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   memcpy(&myData, incomingData, sizeof(myData));
   temp_ext = myData.c;
   humidite = myData.d;
+
   // affichage de la moyenne exterieur
   nb = ++nb;  temp_moy=temp_moy+temp_ext;  myGLCD.setTextColor(TFT_PINK,TFT_BLACK);   myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
 
