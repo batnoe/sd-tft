@@ -21,7 +21,7 @@ const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
-float humidite;
+float humidite; float temp_moy; int nb;
 unsigned long temps;
 unsigned long temps_sd;
 
@@ -99,7 +99,7 @@ void setup()                         // ----- Début du setup ----------------
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4);
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
+  myGLCD.drawString("Moyenne du jour", 120, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default
   printLocalTime();
   temps = millis();
@@ -120,7 +120,7 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4); 
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("Bernard.picasa14@gmail.com", 160, 470,2);
+  myGLCD.drawString("Moyenne du jour", 120, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
   myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
@@ -136,6 +136,9 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
   memcpy(&myData, incomingData, sizeof(myData));
   temp_ext = myData.c;
   humidite = myData.d;
+  // affichage de la moyenne exterieur
+  nb = ++nb;  temp_moy=temp_moy+temp_ext;  myGLCD.setTextColor(TFT_PINK,TFT_BLACK);   myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
+
    if (temp_ext > t_max) {t_max = temp_ext;} else if(temp_ext < t_min and t_min > -30 and temp_ext > -50) {t_min = temp_ext;}    // -------- calcul mini et maxi température extérieur ---------------
   myGLCD.setTextColor(TFT_BLUE,TFT_BLACK);
   myGLCD.drawNumber(humidite-5, 160, 250, 6);
