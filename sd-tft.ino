@@ -120,13 +120,13 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawString("PRESSION", 10, 180,4);
   myGLCD.drawString("HUMIDITE", 10, 260,4); 
   myGLCD.setTextDatum(BC_DATUM); // Centre text on x,y position
-  myGLCD.drawString("Moyenne du jour", 120, 470,2);
+  myGLCD.drawString("Moyenne du jour", 130, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
   myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8
   myGLCD.drawNumber(pres/100+20, 200, 170, 6);
   myGLCD.drawNumber(hum + 3, 250, 250, 6);
-  
+  if (nb == 1010) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
   printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
 }                               
@@ -172,7 +172,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {    
       nb = ++nb;  temp_moy=temp_moy+temp_ext;     
       temps_moy = millis();
     } //  puis affichage
-    myGLCD.setTextColor(TFT_PINK,TFT_BLACK);  myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
+    myGLCD.setTextColor(TFT_PINK,TFT_BLACK);  myGLCD.drawNumber(nb, 10, 460, 2);  myGLCD.drawFloat(temp_moy/nb, 1, 210, 445, 4);
 }
 
 void printLocalTime()
