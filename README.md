@@ -8,6 +8,7 @@ Enregistrement de la température extérieur toutes les 5 minutes sur la carte s
 
 Format enregistrement ---->  DATE        HEURE       TEMPERATURE
 
+Ajout d'un boutton pour enregistrer la moyenne du jour
 
 
 // Pour ESP32 DEVKIT Wroom et TFT 3.5 ILI9486
