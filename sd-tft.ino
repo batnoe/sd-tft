@@ -131,7 +131,7 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawNumber(pres/100+20, 200, 170, 6);
   myGLCD.drawNumber(hum + 3, 250, 250, 6);
   //if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
-  //  printLocalTime(); 
+  printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
   if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
 }                               
