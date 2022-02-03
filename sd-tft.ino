@@ -20,6 +20,8 @@ const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 3600;
 const int   daylightOffset_sec = 3600;
 
+const int button_enr = 0;      // boutton enregistrement
+
 float temp_ext = 0;   float t_max = temp_ext;   float t_min = 30;
 float humidite; float temp_moy; int nb;
 unsigned long temps;  long temps_moy;
@@ -40,6 +42,8 @@ TFT_eSPI myGLCD = TFT_eSPI();       // Invoke custom library
 void setup()                         // ----- Début du setup ----------------
 { 
   Serial.begin(115200);
+  pinMode(button_enr, INPUT_PULLUP);
+
   if (!SD.begin(5)) {
     Serial.println("Carte SD introuvable");
     return;
@@ -123,12 +127,13 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawString("Moyenne du jour", 130, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  myGLCD.drawFloat(temp + 1, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8  0.5 réel -1 chanbre
+  myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8  0.5 réel -1 chanbre
   myGLCD.drawNumber(pres/100+20, 200, 170, 6);
   myGLCD.drawNumber(hum + 3, 250, 250, 6);
-  if (nb == 810) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
-  printLocalTime(); 
+  //if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
+  //  printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
+  if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
 }                               
 // --------------- Fin de la loop -----------------
 
