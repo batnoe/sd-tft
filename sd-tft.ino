@@ -133,7 +133,11 @@ void loop()                        // --------------- Début de la loop --------
   //if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
   printLocalTime(); 
   temps = millis() ;}       //  delay (1000*60);
-  if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
+
+  if (digitalRead (button_enr) == LOW) {time_t rawtime; struct tm timeinfo;
+    if(!getLocalTime(&timeinfo))  {Serial.println("Failed to obtain time");return;}
+    char timeStringBuff[40];  strftime(timeStringBuff, sizeof(timeStringBuff), "%A %d %B %Y:    ", &timeinfo);  appendFile(SD, "/Valeurs.txt", timeStringBuff);
+    char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f° \n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
 }                               
 // --------------- Fin de la loop -----------------
 
