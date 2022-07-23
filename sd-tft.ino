@@ -127,7 +127,7 @@ void loop()                        // --------------- Début de la loop --------
   myGLCD.drawString("Moyenne du jour", 130, 470,2);
   myGLCD.setTextDatum(TL_DATUM); // Remet text a default 
   myGLCD.setTextColor(TFT_GREEN,TFT_BLACK);
-  myGLCD.drawFloat(temp + 0.5, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8  0.5 réel -1 chanbre
+  myGLCD.drawFloat(temp, 1, 210, 90, 6);         //temp_in -3.7 TFT 2.8  0.5 réel -1 chanbre
   myGLCD.drawNumber(pres/100+20, 200, 170, 6);
   myGLCD.drawNumber(hum + 3, 250, 250, 6);
   //if (digitalRead (button_enr) == LOW) {char moyenne[35]; sprintf(moyenne,"   Moyenne du jour:  %.1f°\n", temp_moy/nb); appendFile(SD, "/Valeurs.txt", moyenne);}
